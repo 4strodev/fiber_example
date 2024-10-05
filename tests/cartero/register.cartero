@@ -1,0 +1,17 @@
+version = 1
+url = "{{baseUrl}}/auth/register"
+method = "POST"
+
+[body]
+type = "raw"
+format = "json"
+body = """
+{
+    \"email\": \"example.user+1@example.domain.com\",
+    \"password\": \"1234\"
+}"""
+
+[headers]
+
+[variables]
+baseUrl = "http://localhost:3000"
