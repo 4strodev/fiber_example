@@ -48,7 +48,7 @@ func (f *FiberAdapter) Init(container pkg.Container) error {
 			return nil
 		}
 
-		log.Info("listening on port 3000")
+		log.Info("listening on port 8080")
 		return nil
 	})
 	container.Singleton(func() fiber.Router {
@@ -59,7 +59,7 @@ func (f *FiberAdapter) Init(container pkg.Container) error {
 
 // Start implements adapters.Adapter.
 func (f *FiberAdapter) Start() error {
-	return f.app.Listen(":3000", fiber.ListenConfig{
+	return f.app.Listen(":8080", fiber.ListenConfig{
 		DisableStartupMessage: true,
 	})
 }
