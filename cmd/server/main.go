@@ -15,6 +15,13 @@ func main() {
 	container := wiring.New()
 	container.Transient(auth.NewAuthService)
 	container.Singleton(shared.NewDBClient)
+	container.Singleton(func() *slog.Logger {
+		attributes := []slog.Attr{
+			slog.Any("source", "fiber_example"),
+		}
+		handler := slog.NewJSONHandler(os.Stdout, nil).WithAttrs(attributes)
+		return slog.New(handler)
+	})
 	app := app.NewApp(container)
 
 	app.AddAdapter(&shared.FiberAdapter{})
