@@ -1,8 +1,10 @@
 package shared
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/4strodev/wiring/pkg"
 	"github.com/gofiber/fiber/v3"
@@ -10,25 +12,29 @@ import (
 )
 
 type FiberAdapter struct {
-	app *fiber.App
+	app    *fiber.App
+	logger *slog.Logger
 }
 
 // Init implements adapters.Adapter.
 func (f *FiberAdapter) Init(container pkg.Container) error {
-	var log *slog.Logger
-	err := container.Resolve(&log)
+	err := container.Resolve(&f.logger)
 	if err != nil {
 		return nil
 	}
 	f.app = fiber.New(fiber.Config{
-		ErrorHandler: errorHandler,
+		ErrorHandler: f.errorHandler,
+		ReadTimeout:  time.Second * 30,
 	})
 
 	f.app.Use(recover.New())
 	f.app.Use(func(ctx fiber.Ctx) error {
+		var logLevel slog.Level = slog.LevelInfo
 		response := ctx.Response()
 		errChain := ctx.Next()
 		if errChain != nil {
+			logLevel = slog.LevelError
+
 			if err := ctx.App().ErrorHandler(ctx, errChain); err != nil {
 				ctx.SendStatus(http.StatusInternalServerError)
 			}
@@ -38,9 +44,9 @@ func (f *FiberAdapter) Init(container pkg.Container) error {
 		method := ctx.Method()
 		path := ctx.Path()
 
-		log.Info("{method} {path} {statusCode}", "method", method, "path", path, "statusCode", statusCode)
+		f.logger.Log(context.Background(), logLevel, "{method} {path} {statusCode}", "method", method, "path", path, "statusCode", statusCode)
 
-		return errChain
+		return nil
 	})
 
 	f.app.Hooks().OnListen(func(data fiber.ListenData) error {
@@ -48,7 +54,7 @@ func (f *FiberAdapter) Init(container pkg.Container) error {
 			return nil
 		}
 
-		log.Info("listening on port 8080")
+		f.logger.Info("listening on port 8080")
 		return nil
 	})
 	container.Singleton(func() fiber.Router {
@@ -69,7 +75,8 @@ func (f *FiberAdapter) Stop() error {
 	return f.app.Shutdown()
 }
 
-func errorHandler(ctx fiber.Ctx, err error) error {
+func (f *FiberAdapter) errorHandler(ctx fiber.Ctx, err error) error {
+	f.logger.Error(err.Error())
 	return ctx.Status(http.StatusInternalServerError).JSON(fiber.Map{
 		"msg": err.Error(),
 	})

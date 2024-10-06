@@ -8,10 +8,10 @@ format = "json"
 body = """
 {
     \"email\": \"example.user@example.domain.com\",
-    \"password\": \"1234\"
+    \"password\": \"12345\"
 }"""
 
 [headers]
 
 [variables]
-baseUrl = "http://localhost:3000"
+baseUrl = "http://localhost:8080"

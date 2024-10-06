@@ -1,15 +1,12 @@
 package auth
 
 import (
-	"log/slog"
-
 	"github.com/4strodev/wiring/pkg"
 	"github.com/gofiber/fiber/v3"
 )
 
 type AuthController struct {
 	Service AuthService
-	Logger  *slog.Logger
 	Router  fiber.Router
 }
 
