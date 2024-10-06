@@ -3,8 +3,8 @@ module github.com/4strodev/go_monitoring_example
 go 1.23.0
 
 require (
-	github.com/4strodev/scaffold v0.0.0-20241004093023-5d878ba2a5c0
-	github.com/4strodev/wiring v0.0.0-20241002205758-4e4405ee55c8
+	github.com/4strodev/scaffold v1.0.0-beta
+	github.com/4strodev/wiring v1.0.0-beta
 	github.com/gofiber/fiber/v3 v3.0.0-beta.3
 )
 

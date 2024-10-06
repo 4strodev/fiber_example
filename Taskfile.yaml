@@ -14,6 +14,8 @@ tasks:
   build:
     desc: Build the application
     cmd: go build -o {{ .BIN }} {{ .SRC }}
+    env:
+      CGO_ENABLED: 1
 
   start:
     desc: Start application in debug mode
