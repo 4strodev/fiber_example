@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/4strodev/go_monitoring_example/pkg/features/auth"
 	"github.com/4strodev/go_monitoring_example/pkg/shared"
@@ -34,7 +35,7 @@ func main() {
 	}
 
 	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, os.Interrupt, os.Kill)
+	signal.Notify(sigs, os.Interrupt, os.Kill, syscall.SIGTERM)
 
 	errs, err := app.Start()
 	if err != nil {

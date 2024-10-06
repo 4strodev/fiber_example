@@ -17,9 +17,9 @@ ENV GOCACHE=/root/.cache/go-build
 RUN --mount=type=cache,target="/root/.cache/go-build" task build
 
 # Using scratch for reduce the image size
-FROM alpine:3.20 AS prod
+FROM alpine:3.20
 WORKDIR /app
 # We only need the self-contained binary
 COPY --from=build /app/bin/server /app/server
-ENTRYPOINT ["/app/server"]
+CMD ["/app/server"]
 
