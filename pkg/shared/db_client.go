@@ -6,11 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type User struct {
+type UserSchema struct {
 	gorm.Model
 	ID       uuid.UUID `gorm:"primaryKey"`
 	Email    string    `gorm:"unique"`
 	Password string
+}
+
+func (UserSchema) TableName() string {
+	return "users"
 }
 
 func NewDBClient() (*gorm.DB, error) {
@@ -19,7 +23,7 @@ func NewDBClient() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&User{})
+	err = db.AutoMigrate(&UserSchema{})
 	if err != nil {
 		return nil, err
 	}

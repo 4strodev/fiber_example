@@ -6,11 +6,9 @@ import (
 	"github.com/google/uuid"
 )
 
-type EventName string
-
-type Event[T any] struct {
+type Event struct {
 	Id         uuid.UUID `json:"id"`
 	TimeStamp  time.Time `json:"time_stamp"`
-	Name       EventName `json:"name"`
-	Attributes T         `json:"attributes"`
+	Name       string    `json:"name"`
+	Attributes any       `json:"attributes"`
 }

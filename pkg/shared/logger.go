@@ -4,14 +4,18 @@ import (
 	"io"
 	"log/slog"
 	"os"
+	"path"
 )
 
+const log_file = "./tmp/log/logs.txt"
+
 func NewLogger() (*slog.Logger, error) {
-	err := os.MkdirAll("/tmp/log/fiber_example", os.ModePerm|os.ModeDir)
+	directory := path.Dir(log_file)
+	err := os.MkdirAll(directory, os.ModePerm|os.ModeDir)
 	if err != nil {
 		return nil, err
 	}
-	logFile, err := os.OpenFile("/tmp/log/fiber_example/logs.txt", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModePerm)
+	logFile, err := os.OpenFile(log_file, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}

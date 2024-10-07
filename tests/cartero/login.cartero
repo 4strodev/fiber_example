@@ -8,7 +8,7 @@ format = "json"
 body = """
 {
     \"email\": \"example.user@example.domain.com\",
-    \"password\": \"12345\"
+    \"password\": \"1234\"
 }"""
 
 [headers]
